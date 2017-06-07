@@ -20,11 +20,13 @@ import javax.annotation.Nullable;
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
+import io.intercom.android.sdk.push.IntercomPushClient;
 
 public class IntercomModule extends ReactContextBaseJavaModule {
 
     private static final String MODULE_NAME = "IntercomWrapper";
-    public static final String TAG = "Intercom";
+    public static final String TAG = "RNIntercom";
+    private static final IntercomPushClient intercomPushClient = new IntercomPushClient();
 
     public IntercomModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -100,6 +102,11 @@ public class IntercomModule extends ReactContextBaseJavaModule {
             Log.e(TAG, "logEvent - unable to deconstruct metaData");
             callback.invoke(e.toString());
         }
+    }
+
+    @ReactMethod
+    public void sendTokenToIntercom(String token) {
+        intercomPushClient.sendTokenToIntercom(getCurrentActivity().getApplication(), token);
     }
 
     @ReactMethod
