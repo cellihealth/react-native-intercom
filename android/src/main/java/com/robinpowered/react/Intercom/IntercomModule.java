@@ -217,7 +217,26 @@ public class IntercomModule extends ReactContextBaseJavaModule {
         Map<String, Object> map = recursivelyDeconstructReadableMap(readableMap);
         UserAttributes.Builder builder = new UserAttributes.Builder();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            builder.withCustomAttribute(entry.getKey(), entry.getValue());
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            switch (key) {
+            case "name":
+               Log.i(TAG, "UserAttribute.Name = " + value.toString());
+               builder.withName(value.toString());
+               break;
+            case "email":
+               builder.withEmail(value.toString());
+               break;
+            case "phone":
+               builder.withPhone(value.toString());
+               break;
+            case "userId":
+               Log.i(TAG, "UserAttribute.UserID = " + value.toString());
+               builder.withUserId(value.toString());
+               break;
+            default:
+               builder.withCustomAttribute(key, value);
+            }
         }
         return builder.build();
     }
